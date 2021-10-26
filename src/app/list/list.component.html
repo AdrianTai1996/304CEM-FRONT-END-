@@ -1,0 +1,78 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons>
+      <ion-button [routerLink]="['/','home']">
+        <ion-icon color="light" name="chevron-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title color="light" mode="ios">{{result[0]?.name}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-spinner *ngIf="loading" color="primary"></ion-spinner>
+
+  <div *ngIf="!loading && result.length > 0" class="ion-padding">
+    <div *ngFor="let result of result; let i = index">
+      <img style="display: block; margin: auto;" src="{{result?.image}}" width="72">
+      <h4 style="text-align: center;"><b>{{result?.name}}</b></h4>
+      <br>
+
+      <ion-row>
+        <ion-col>
+          <b> Current Price</b>
+        </ion-col>
+        <ion-col style="text-align: end;">
+          {{result?.current_price | currency}}
+        </ion-col>
+      </ion-row>
+      <br>
+      <ion-row>
+        <ion-col>
+          <div>
+            <b>Price Change % <br>(24 hour)</b>
+          </div>
+        </ion-col>
+        <ion-col style="text-align: end;">
+          <ion-icon *ngIf="result?.price_change_percentage_24h < 0" color="danger" name="caret-down-outline">
+          </ion-icon>
+          <ion-icon *ngIf="result?.price_change_percentage_24h > 0" color="primary" name="caret-up-outline">
+          </ion-icon>
+          {{result?.price_change_percentage_24h | number: '1.2-2'}}
+        </ion-col>
+      </ion-row>
+      <br>
+      <ion-row>
+        <ion-col>
+          <div>
+            <b>Highest (24 hour)</b>
+          </div>
+        </ion-col>
+        <ion-col style="text-align: end;">
+          {{result?.high_24h | currency}}
+        </ion-col>
+      </ion-row>
+      <br>
+      <ion-row>
+        <ion-col>
+          <div>
+            <b>Lowest (24 hour)</b>
+          </div>
+        </ion-col>
+        <ion-col style="text-align: end;">
+          {{result?.low_24h | currency}}
+        </ion-col>
+      </ion-row>
+    </div>
+  </div>
+
+</ion-content>
+
+<ion-footer *ngIf="!loading && result.length > 0">
+  <ion-toolbar [color]="isFav ? 'danger' : 'primary'" (click)="addRemoveFav(result[0]?.id)">
+    <ion-title color="light" style="text-align: center;">
+      <small *ngIf="!isFav">Add to Favourites</small>
+      <small *ngIf="isFav">Remove from Favourites</small>
+    </ion-title>
+  </ion-toolbar>
+</ion-footer>
